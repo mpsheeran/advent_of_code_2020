@@ -4,7 +4,11 @@ from re import split as re_split
 class Passport:
     def __init__(self, raw_text: str=""):
         self.field_list = self.process_text(raw_text)
-        self.field_dict = {}
+        self.field_dict = {
+            field.split(':')[0]:field.split(':')[1] ##TODO: split only once. this sucks.
+            for field
+            in self.field_list
+        }
     
     def is_valid(self):
         pass
