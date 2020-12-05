@@ -9,9 +9,12 @@ class Passport:
             for field
             in self.field_list
         }
+        self.validity = self.is_valid()
     
-    def is_valid(self):
-        pass
+    def is_valid(self) -> bool:
+        required_fields = {"byr", "iyr", "eyr", "hgt","hcl" ,"ecl" ,"pid",}
+        fields_possessed = set((self.field_dict.keys()))
+        return fields_possessed.issuperset(required_fields)
 
     def process_text(self, raw_text: str):
         return re_split('[\n ]', raw_text)
@@ -19,4 +22,4 @@ class Passport:
 with open("d4p1_input.txt") as input_file_stream:
     passport_raw_text_list = input_file_stream.read().strip().split('\n\n')
     passports = [Passport(raw_text) for raw_text in passport_raw_text_list]
-    pdb.set_trace()
+    print(len(list(filter(lambda x: x.validity, passports))))
