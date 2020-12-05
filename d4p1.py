@@ -1,0 +1,18 @@
+import pdb
+from re import split as re_split
+
+class Passport:
+    def __init__(self, raw_text: str=""):
+        self.field_list = self.process_text(raw_text)
+        self.field_dict = {}
+    
+    def is_valid(self):
+        pass
+
+    def process_text(self, raw_text: str):
+        return re_split('[\n ]', raw_text)
+
+with open("d4p1_input.txt") as input_file_stream:
+    passport_raw_text_list = input_file_stream.read().strip().split('\n\n')
+    passports = [Passport(raw_text) for raw_text in passport_raw_text_list]
+    pdb.set_trace()
