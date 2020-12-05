@@ -30,7 +30,7 @@ with open("5_input.txt") as input_file:
     map_array = input_file.read().strip().split('\n')
 
     skiiers = [
-        Skiier(x_slope=slope[0], y_slope=slope[1])
+        Skiier(*slope)
         for slope
         in [(1, 1), (3, 1), (5, 1), (7, 1), (1, 2)]
     ]
