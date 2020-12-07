@@ -3,13 +3,44 @@ import pdb
 # input: string of form FBFBBFFRLR
 # where F means "front", B means "back", L means "left", and R means "right"
 def convert_bsp_string_to_seat(bsp_string: str) -> tuple:
-    # TODO
-    return (None, None)
+    
+    row_bsp_string = bsp_string[0:6]
+    col_bsp_string = bsp_string[7:9]
+
+    row = recurse_bsp_string(
+        bsp_string=row_bsp_string,
+        minimum=0,
+        maximum=127
+    )
+
+    col = recurse_bsp_string(
+        bsp_string=col_bsp_string,
+        minimum=0,
+        maximum=7
+    )
+
+    return (row, col)
+
+
+def recurse_bsp_string(bsp_string:str, minimum:int, maximum:int) -> int:
+    is_top = (
+        bsp_string[0] in ['F', 'R']
+    )
+    
+    #guard condition
+    if len(bsp_string) == 1:
+        return maximum if is_top else minimum
+
+    else:
+        return recurse_bsp_string(
+            bsp_string=bsp_string[1:],
+            minimum=minimum if not is_top else (maximum + minimum) / 2,
+            maximum=maximum if is_top else (maximum + minimum) / 2
+        )
 
 # multiply the row by 8, then add the column. 
 def convert_seat_to_seat_id(seat: tuple) -> int:
-    # TODO
-    return 0
+    return seat[0] * 8 + seat[1]
 
 
 class BoardingPass():
