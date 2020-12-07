@@ -30,10 +30,15 @@ class Passport:
         return fields_possessed.issuperset(required_fields)
 
     def is_data_valid(self) -> bool:
-        for field in self.field_dict.items():
-            if not validation_regex_dict[ field[0] ].search( field[1] ):
-                return False
-        return True            
+        return reduce(
+            lambda x, y: x & y,
+            [
+                True if validation_regex_dict[ field[0] ].search( field[1] )
+                else False
+                for field
+                in self.field_dict.items()
+            ]
+        )
 
     def process_text(self, raw_text: str):
         return re.split('[\n ]', raw_text)
