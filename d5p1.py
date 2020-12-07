@@ -21,8 +21,7 @@ class BoardingPass():
             seat=self.seat_tuple
         )
     def __repr__(self):
-        return str(self.seat_id)
-
+        return f"{self.seat_id}: {self.seat_tuple}"
 
 
 if __name__ == "__main__":
@@ -34,6 +33,6 @@ if __name__ == "__main__":
         for seat_string
         in seat_string_list
     ]
-    
+
     pdb.set_trace()
         
