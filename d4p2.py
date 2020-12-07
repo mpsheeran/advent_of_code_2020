@@ -13,10 +13,10 @@ validation_regex_dict = {
     "cid": re.compile(r".*"),
 }
 
-
 class Passport:
     def __init__(self, raw_text: str="") -> None:
-        self.field_list = self.process_text(raw_text)
+        self.field_list = re.split('[\n ]', raw_text)
+
         self.field_dict = {
             field.split(':')[0]:field.split(':')[1] ##TODO: split only once. this sucks.
             for field
@@ -39,9 +39,6 @@ class Passport:
                 in self.field_dict.items()
             ]
         )
-
-    def process_text(self, raw_text: str):
-        return re.split('[\n ]', raw_text)
 
 with open("d4p1_input.txt") as input_file_stream:
     # assumptions: string of passport data delimited by two adjacent newlines
