@@ -48,37 +48,65 @@ def convert_seat_to_seat_id(seat: tuple) -> int:
 
 
 class BoardingPass():
-    def __init__(self, bsp_string: str):
-        self.seat_tuple = convert_bsp_string_to_seat(
-            bsp_string=bsp_string
-            )
+    def __init__(self, bsp_string: str=None, row: int=None, col: int=None):
+        if row is not None and col is not None:
+            self.row, self.col = (row, col)
+            
+        elif bsp_string:
+            self.row, self.col = convert_bsp_string_to_seat(
+                bsp_string=bsp_string
+                )
+        else:
+            self.row, self.col = (None, None)
+        
         self.seat_id = convert_seat_to_seat_id(
-            seat=self.seat_tuple
+            seat=(self.row, self.col)
         )
-        # print(self)
-    def __repr__(self):
-        return f"{self.seat_id}: {self.seat_tuple}"
+        
+        
+    # def __init__(self, ):
+    #     self.row = row
+    #     self.col = col
+    #     self.seat_id = convert_seat_to_seat_id(
+    #         seat=(self.row, self.col)
+    #     )
+    #     return
 
+    def __repr__(self):
+        return f"{self.seat_id}: {self.col},{self.row}"
+    def __lt__(self, other):
+        return (self.col < other.col) or ((self.col == other.col) and self.row < other.row)
+    def __gt__(self, other):
+        return (self.col > other.col) or ((self.col == other.col) and self.row > other.row)
+    def __eq__(self, other):
+        return (self.col == other.col) and (self.row == other.row)
+    def __le__(self, other):
+        return (self == other) or (self < other)
+    def __ge__(self, other):
+        return (self == other) or (self > other)
+    def __ne__(self, other):
+        return not (self == other)
 
 if __name__ == "__main__":
     with open("d5input.txt") as input_file:
         seat_string_list = input_file.read().strip().split('\n')
     
-    boarding_passes = [
+    boarding_passes = sorted([
         BoardingPass( bsp_string=seat_string )
         for seat_string
         in seat_string_list
-    ]
+    ])
 
-    seat_ids = {
-        boarding_pass.seat_id
-        for boarding_pass
-        in boarding_passes
-    }
-
-    my_seat = set(range(
-        min(seat_ids),
-        max(seat_ids)
-    )) - seat_ids
-
-    pdb.set_trace()
+    
+    for index, curr_pass in enumerate(boarding_passes):
+        if index > 0:
+            previous_pass = boarding_passes[index - 1]
+            if index + 1 < len(boarding_passes):
+                next_pass = boarding_passes[index + 1]
+                if (previous_pass.row + 1 < curr_pass.row):
+                    my_seat = BoardingPass(
+                        row = curr_pass.row - 1,
+                        col = curr_pass.col
+                    )
+                
+    print(my_seat)
